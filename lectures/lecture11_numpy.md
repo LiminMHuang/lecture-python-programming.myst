@@ -990,14 +990,14 @@ Things get even trickier when we move to higher dimensions.
 
 To help us, we can use the following list of rules:
 
-- *Step 1:* When the dimensions of two arrays do not match, NumPy will expand the one with fewer dimensions by adding dimension(s) on the left of the existing dimensions.  
-  - For example, if `a -> (3, 3)` and `b -> (3,)`, then broadcasting will add a dimension to the left so that `b -> (1, 3)`;  
-  - If `a -> (2, 2, 2)` and `b -> (2, 2)`, then broadcasting will add a dimension to the left so that `b -> (1, 2, 2)`;  
-  - If `a -> (3, 2, 2)` and `b -> (2,)`, then broadcasting will add two dimensions to the left so that `b -> (1, 1, 2)` (you can also see this process as going through *Step 1* twice).  
-- *Step 2:* When the two arrays have the same dimension but different shapes, NumPy will try to expand dimensions where the shape index is 1.  
-  - For example, if `a -> (1, 3)` and `b -> (3, 1)`, then broadcasting will expand dimensions with shape 1 in both `a` and `b` so that `a -> (3, 3)` and `b -> (3, 3)`;  
-  - If `a -> (2, 2, 2)` and  `b -> (1, 2, 2)`, then broadcasting will expand the first dimension of `b` so that `b -> (2, 2, 2)`;  
-  - If `a -> (3, 2, 2)` and `b -> (1, 1, 2)`, then broadcasting will expand `b` on all dimensions with shape 1 so that `b -> (3, 2, 2)`.  
+- *Step 1:* When the dimensions of two arrays do not match, NumPy will expand the one with fewer dimensions by adding dimension(s) on the left of the existing dimensions.
+  - For example, if `a -> (3, 3)` and `b -> (3,)`, then broadcasting will add a dimension to the left so that `b -> (1, 3)`;
+  - If `a -> (2, 2, 2)` and `b -> (2, 2)`, then broadcasting will add a dimension to the left so that `b -> (1, 2, 2)`;
+  - If `a -> (3, 2, 2)` and `b -> (2,)`, then broadcasting will add two dimensions to the left so that `b -> (1, 1, 2)` (you can also see this process as going through *Step 1* twice).
+- *Step 2:* When the two arrays have the same dimension but different shapes, NumPy will try to expand dimensions where the shape index is 1.
+  - For example, if `a -> (1, 3)` and `b -> (3, 1)`, then broadcasting will expand dimensions with shape 1 in both `a` and `b` so that `a -> (3, 3)` and `b -> (3, 3)`;
+  - If `a -> (2, 2, 2)` and  `b -> (1, 2, 2)`, then broadcasting will expand the first dimension of `b` so that `b -> (2, 2, 2)`;
+  - If `a -> (3, 2, 2)` and `b -> (1, 1, 2)`, then broadcasting will expand `b` on all dimensions with shape 1 so that `b -> (3, 2, 2)`.
 
 
 Here are code examples for broadcasting higher dimensional arrays
@@ -1045,8 +1045,8 @@ print(f'the shape of array b is {b.shape}')
 a + b
 ```
 
-- *Step 3:* After Step 1 and 2, if the two arrays still do not match, a `ValueError` will be raised. For example, suppose `a -> (2, 2, 3)` and `b -> (2, 2)`  
-  - By *Step 1*, `b` will be expanded to `b -> (1, 2, 2)`;  
+- *Step 3:* After Step 1 and 2, if the two arrays still do not match, a `ValueError` will be raised. For example, suppose `a -> (2, 2, 3)` and `b -> (2, 2)`
+  - By *Step 1*, `b` will be expanded to `b -> (1, 2, 2)`;
   - By *Step 2*, `b` will be expanded to `b -> (2, 2, 2)`;  
   - We can see that they do not match each other after the first two steps. Thus, a `ValueError` will be raised
 
@@ -1073,11 +1073,11 @@ a + b
 
 NumPy arrays are mutable data types, like Python lists.
 
-In other words, their contents can be altered (mutated) in memory after initialization.
+In other words, their contents can be altered (mutated) in memory after initialisation.
 
 We already saw examples above.
 
-Here’s another example:
+Here is another example:
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1087,13 +1087,21 @@ a
 ```
 
 ```{code-cell} ipython3
+
+```
+
+```{code-cell} ipython3
+a.shape
+```
+
+```{code-cell} ipython3
 :hide-output: false
 
 a[-1] = 0  # Change last element to 0
 a
 ```
 
-Mutability leads to the following behavior (which can be shocking to MATLAB programmers…)
+Mutability leads to the following behaviour (which can be shocking to MATLAB programmers…)
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1110,14 +1118,14 @@ b[0] = 0.0
 a
 ```
 
-What’s happened is that we have changed `a` by changing `b`.
+What has happened is that we have changed `a` by changing `b`.
 
 The name `b` is bound to `a` and becomes just another reference to the
 array (the Python assignment model is described in more detail [later in the course](https://python-programming.quantecon.org/python_advanced_features.html)).
 
 Hence, it has equal rights to make changes to that array.
 
-This is in fact the most sensible default behavior!
+This is in fact the most sensible default behaviour!
 
 It means that we pass around only pointers to data, rather than making copies.
 
@@ -1166,11 +1174,11 @@ Note that the change to `b` has not affected `a`.
 
 ## Additional Functionality
 
-Let’s look at some other useful things we can do with NumPy.
+Let us look at some other useful things we can do with NumPy.
 
 +++
 
-### Vectorized Functions
+### Vectorised Functions
 
 
 <a id='index-11'></a>
@@ -1194,12 +1202,11 @@ for i in range(n):
     y[i] = np.sin(z[i])
 ```
 
-Because they act element-wise on arrays, these functions are called *vectorized functions*.
+Because they act element-wise on arrays, these functions are called *vectorised functions*.
 
 In NumPy-speak, they are also called *ufuncs*, which stands for “universal functions”.
 
-As we saw above, the usual arithmetic operations (`+`, `*`, etc.) also
-work element-wise, and combining these with the ufuncs gives a very large set of fast element-wise functions.
+As we saw above, the usual arithmetic operations (`+`, `*`, etc.) also work element-wise, and combining these with the ufuncs gives a very large set of fast element-wise functions.
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1224,7 +1231,7 @@ def f(x):
     return 1 if x > 0 else 0
 ```
 
-The NumPy function `np.where` provides a vectorized alternative:
+The NumPy function `np.where` provides a vectorised alternative:
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1239,7 +1246,7 @@ x
 np.where(x > 0, 1, 0)  # Insert 1 if x > 0 true, otherwise 0
 ```
 
-You can also use `np.vectorize` to vectorize a given function
+You can also use `np.vectorize` to vectorise a given function
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1248,7 +1255,7 @@ f = np.vectorize(f)
 f(x)                # Passing the same vector x as in the previous example
 ```
 
-However, this approach doesn’t always obtain the same speed as a more carefully crafted vectorized function.
+However, this approach does not always obtain the same speed as a more carefully crafted vectorised function.
 
 +++
 
@@ -1321,10 +1328,9 @@ z[z > 3]
 
 ### Sub-packages
 
-NumPy provides some additional functionality related to scientific programming
-through its sub-packages.
+NumPy provides some additional functionality related to scientific programming through its sub-packages.
 
-We’ve already seen how we can generate random variables using np.random
+We have already seen how we can generate random variables using np.random
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1355,9 +1361,9 @@ np.linalg.inv(A)           # Compute the inverse
 <a id='index-14'></a>
 Much of this functionality is also available in [SciPy](http://www.scipy.org/), a collection of modules that are built on top of NumPy.
 
-We’ll cover the SciPy versions in more detail [soon](https://python-programming.quantecon.org/scipy.html).
+We will cover the SciPy versions in more detail [soon](https://python-programming.quantecon.org/scipy.html).
 
-For a comprehensive list of what’s available in NumPy see [this documentation](https://docs.scipy.org/doc/numpy/reference/routines.html).
+For a comprehensive list of what is available in NumPy see [this documentation](https://docs.scipy.org/doc/numpy/reference/routines.html).
 
 +++
 
@@ -1365,16 +1371,15 @@ For a comprehensive list of what’s available in NumPy see [this documentation]
 
 
 <a id='index-15'></a>
-We mentioned in an [previous lecture](https://python-programming.quantecon.org/need_for_speed.html) that NumPy-based vectorization can
-accelerate scientific applications.
+We mentioned in an [previous lecture](https://python-programming.quantecon.org/need_for_speed.html) that NumPy-based vectorisation can accelerate scientific applications.
 
 In this section we try some speed comparisons to illustrate this fact.
 
 +++
 
-### Vectorization vs Loops
+### Vectorisation vs Loops
 
-Let’s begin with some non-vectorized code, which uses a native Python loop to generate,
+Let us begin with some non-vectorised code, which uses a native Python loop to generate,
 square and then sum a large number of random variables:
 
 ```{code-cell} ipython3
@@ -1394,7 +1399,7 @@ for i in range(n):
     y += x**2
 ```
 
-The following vectorized code achieves the same thing.
+The following vectorised code achieves the same thing.
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1409,12 +1414,12 @@ As you can see, the second code block runs much faster.  Why?
 
 The second code block breaks the loop down into three basic operations
 
-1. draw `n` uniforms  
-1. square them  
-1. sum them  
+1. draw `n` uniforms
+1. square them
+1. sum them
 
 
-These are sent as batch operators to optimized machine code.
+These are sent as batch operators to optimised machine code.
 
 Apart from minor overheads associated with sending data back and forth, the result is C or Fortran-like speed.
 
@@ -1433,13 +1438,11 @@ The next section illustrates this point.
 <a id='index-16'></a>
 As discussed above, many functions provided by NumPy are universal functions (ufuncs).
 
-By exploiting ufuncs, many operations can be vectorized, leading to faster
-execution.
+By exploiting ufuncs, many operations can be vectorised, leading to faster execution.
 
-For example, consider the problem of maximizing a function $ f $ of two
-variables $ (x,y) $ over the square $ [-a, a] \times [-a, a] $.
+For example, consider the problem of maximising a function $ f $ of two variables $ (x,y) $ over the square $ [-a, a] \times [-a, a] $.
 
-For $ f $ and $ a $ let’s choose
+For $ f $ and $ a $ let us choose
 
 $$
 f(x,y) = \frac{\cos(x^2 + y^2)}{1 + x^2 + y^2}
@@ -1447,7 +1450,7 @@ f(x,y) = \frac{\cos(x^2 + y^2)}{1 + x^2 + y^2}
 a = 3
 $$
 
-Here’s a plot of $ f $
+Here is a plot of $ f $
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1474,10 +1477,10 @@ ax.set_ylabel('$y$', fontsize=14)
 plt.show()
 ```
 
-To maximize it, we’re going to use a naive grid search:
+To maximise it, we are going to use a naive grid search:
 
-1. Evaluate $ f $ for all $ (x,y) $ in a grid on the square.  
-1. Return the maximum of observed values.  
+1. Evaluate $ f $ for all $ (x,y) $ in a grid on the square.
+1. Return the maximum of observed values.
 
 
 The grid will be
@@ -1488,7 +1491,7 @@ The grid will be
 grid = np.linspace(-3, 3, 1000)
 ```
 
-Here’s a non-vectorized version that uses Python loops.
+Here is a non-vectorised version that uses Python loops.
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1504,7 +1507,7 @@ for x in grid:
             m = z
 ```
 
-And here’s a vectorized version
+And here is a vectorised version
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1515,7 +1518,7 @@ x, y = np.meshgrid(grid, grid)
 np.max(f(x, y))
 ```
 
-In the vectorized version, all the looping takes place in compiled code.
+In the vectorised version, all the looping takes place in compiled code.
 
 As you can see, the second version is *much* faster.
 
