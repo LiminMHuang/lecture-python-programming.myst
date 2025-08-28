@@ -1542,7 +1542,7 @@ $$
 
 Now write a new function that does the same job, but uses NumPy arrays and array operations for its computations, rather than any form of Python loop.
 
-(Such functionality is already implemented as `np.poly1d`, but for the sake of the exercise don’t use this class)
+(Such functionality is already implemented as `np.poly1d`, but for the sake of the exercise do not use this class)
 
 Use `np.cumprod()`
 
@@ -1556,13 +1556,23 @@ This code does the job
 :hide-output: false
 
 def p(x, coef):
-    X = np.ones_like(coef)
+    X = np.ones_like(coef) # creates an array of ones with the same shape as coef
+    X[1:] = x # replaces everything except the first element
+    y = np.cumprod(X)   # y = [1, x, x**2,...], compute cumulative product, np.cumprod needs an array of values as input. This is why X is created.
+    return coef @ y
+```
+
+```{code-cell} ipython3
+:hide-output: false
+
+def p(x, coef):
+    X = np.ones_like(coef) # creates an array of ones with the same shape as `coef`
     X[1:] = x
     y = np.cumprod(X)   # y = [1, x, x**2,...]
     return coef @ y
 ```
 
-Let’s test it
+Let us test it
 
 ```{code-cell} ipython3
 :hide-output: false
