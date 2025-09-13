@@ -47,7 +47,7 @@ Here's a popularity comparison over time against Matlab and STATA courtesy of St
 :scale: 100
 ```
 
-Just as [NumPy](https://www.numpy.org/) provides the basic array data type plus core array operations, pandas
+Just as [NumPy](https://numpy.org/) provides the basic array data type plus core array operations, pandas
 
 1. defines fundamental structures for working with data and
 1. endows them with methods that facilitate operations such as
@@ -270,7 +270,7 @@ df.loc[(df.cc + df.cg >= 80) & (df.POP <= 20000), ['country', 'year', 'POP']]
 
 **Application: Subsetting Dataframe**
 
-Real-world datasets can be [enormous](https://developers.google.com/machine-learning/data-prep/construct/collect/data-size-quality).
+Real-world datasets can be [enormous](https://developers.google.com/machine-learning/crash-course/overfitting).
 
 It is sometimes desirable to work with a subset of data to enhance computational efficiency and reduce redundancy.
 
@@ -499,9 +499,9 @@ plt.show()
 
 Python makes it straightforward to query online databases programmatically.
 
-An important database for economists is [FRED](https://research.stlouisfed.org/fred2/) --- a vast collection of time series data maintained by the St. Louis Fed.
+An important database for economists is [FRED](https://fred.stlouisfed.org/) --- a vast collection of time series data maintained by the St. Louis Fed.
 
-For example, suppose that we are interested in the [unemployment rate](https://research.stlouisfed.org/fred2/series/UNRATE).
+For example, suppose that we are interested in the [unemployment rate](https://fred.stlouisfed.org/series/UNRATE).
 
 (To download the data as a csv, click on the top right `Download` and select the `CSV (data)` option).
 
@@ -516,7 +516,7 @@ We start with a relatively low-level method and then return to pandas.
 ```{index} single: Python; requests
 ```
 
-One option is to use [requests](https://requests.readthedocs.io/en/master/), a standard Python library for requesting data over the Internet.
+One option is to use [requests](https://requests.readthedocs.io/en/latest/), a standard Python library for requesting data over the Internet.
 
 To begin, try the following code on your computer
 
@@ -534,7 +534,7 @@ If you do get an error, then there are two likely causes
 In the second case, you can either
 
 * switch to another machine
-* solve your proxy problem by reading [the documentation](https://requests.readthedocs.io/en/master/)
+* solve your proxy problem by reading [the documentation](https://requests.readthedocs.io/en/latest/)
 
 Assuming that all is working, you can now proceed to use the `source` object returned by the call `requests.get('https://research.stlouisfed.org/fred2/series/UNRATE/downloaddata/UNRATE.csv')`
 
