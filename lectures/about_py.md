@@ -89,7 +89,7 @@ series, as well as in our later series on [JAX](https://jax.quantecon.org/intro.
 
 [Python](https://www.python.org) is a general-purpose programming language conceived in 1989 by [Guido van Rossum](https://en.wikipedia.org/wiki/Guido_van_Rossum).
 
-Python is free and [open source](https://en.wikipedia.org/wiki/Open_source), with development coordinated through the [Python Software Foundation](https://www.python.org/psf/).
+Python is free and [open source](https://en.wikipedia.org/wiki/Open_source), with development coordinated through the [Python Software Foundation](https://www.python.org/psf-landing/).
 
 This is important because it
 
@@ -311,7 +311,7 @@ But when we want to work with larger arrays in real programs we need more effici
 For this we need to use libraries for working with arrays.
 
 For Python, the most important matrix and array processing library is
-[NumPy](https://www.numpy.org/) library.
+[NumPy](https://numpy.org/) library.
 
 For example, let's build a NumPy array with 100 elements
 
@@ -349,7 +349,7 @@ We will discuss the details later in the lecture series, where we cover NumPy in
 While NumPy is still the king of array processing in Python, there are now
 important competitors.
 
-Libraries such as [JAX](https://github.com/google/jax), [Pytorch](https://pytorch.org/), and [CuPy](https://cupy.dev/) also have
+Libraries such as [JAX](https://github.com/jax-ml/jax), [Pytorch](https://pytorch.org/), and [CuPy](https://cupy.dev/) also have
 built in array types and array operations that can be very fast and efficient.
 
 In fact these libraries are better at exploiting parallelization and fast hardware, as
@@ -365,7 +365,7 @@ This lecture series will provide you with extensive background in NumPy.
 
 ### SciPy
 
-The [SciPy](https://www.scipy.org) library is built on top of NumPy and provides additional functionality.
+The [SciPy](https://scipy.org/) library is built on top of NumPy and provides additional functionality.
 
 (tuple_unpacking_example)=
 For example, let's calculate $\int_{-2}^2 \phi(z) dz$ where $\phi$ is the standard normal density.
@@ -430,9 +430,9 @@ Other graphics libraries include
 * [Plotly](https://plotly.com/python/)
 * [seaborn](https://seaborn.pydata.org/) --- a high-level interface for matplotlib
 * [Altair](https://altair-viz.github.io/)
-* [Bokeh](https://bokeh.pydata.org/en/latest/)
+* [Bokeh](https://docs.bokeh.org/en/latest/)
 
-You can visit the [Python Graph Gallery](https://www.python-graph-gallery.com/) for more example plots drawn using a variety of libraries.
+You can visit the [Python Graph Gallery](https://python-graph-gallery.com/) for more example plots drawn using a variety of libraries.
 
 
 ### Networks and Graphs
