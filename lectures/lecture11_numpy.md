@@ -69,7 +69,7 @@ from matplotlib import cm
 <a id='index-2'></a>
 The essential problem that NumPy solves is fast array processing.
 
-The most important structure that NumPy defines is an array data type, formally called a [numpy.ndarray](http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html).
+The most important structure that NumPy defines is an array data type, formally called a [numpy.ndarray](http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html) (N-dimensional array).
 
 NumPy arrays power a very large proportion of the scientific Python ecosystem.
 
@@ -189,6 +189,11 @@ You can probably guess what `np.ones` creates.
 Related is `np.empty`, which creates arrays in memory that can later be populated with data
 
 ```{code-cell} ipython3
+y1 = np.ones(9)
+y1
+```
+
+```{code-cell} ipython3
 :hide-output: false
 
 z = np.empty(3)
@@ -217,7 +222,10 @@ To create an identity matrix use either `np.identity` or `np.eye`
 :hide-output: false
 
 z = np.identity(2)
-z
+print(z)
+z2 = np.eye(2)
+print(z2)
+z == z2
 ```
 
 In addition, NumPy arrays can be created from Python lists, tuples, etc. using `np.array`
@@ -928,7 +936,7 @@ ax.text(10.5, 7.0, '=', size=12, ha='center', va='center');
 
 While broadcasting is very useful, it can sometimes seem confusing.
 
-For example, let’s try adding `a -> (3, 2)` and `b -> (3,)`.
+For example, let us try adding `a -> (3, 2)` and `b -> (3,)`.
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -990,7 +998,7 @@ Things get even trickier when we move to higher dimensions.
 
 To help us, we can use the following list of rules:
 
-- *Step 1:* When the dimensions of two arrays do not match, NumPy will expand the one with fewer dimensions by adding dimension(s) on the left of the existing dimensions.
+- *Step 1:* When the dimensions of two arrays do not match, NumPy will expand the one with fewer dimensions by adding dimension(s) *on the left of the existing dimensions*.
   - For example, if `a -> (3, 3)` and `b -> (3,)`, then broadcasting will add a dimension to the left so that `b -> (1, 3)`;
   - If `a -> (2, 2, 2)` and `b -> (2, 2)`, then broadcasting will add a dimension to the left so that `b -> (1, 2, 2)`;
   - If `a -> (3, 2, 2)` and `b -> (2,)`, then broadcasting will add two dimensions to the left so that `b -> (1, 1, 2)` (you can also see this process as going through *Step 1* twice).
@@ -1073,7 +1081,7 @@ a + b
 
 NumPy arrays are mutable data types, like Python lists.
 
-In other words, their contents can be altered (mutated) in memory after initialisation.
+In other words, *their contents can be altered (mutated) in memory after initialisation.*
 
 We already saw examples above.
 
@@ -1084,10 +1092,6 @@ Here is another example:
 
 a = np.array([42, 44])
 a
-```
-
-```{code-cell} ipython3
-
 ```
 
 ```{code-cell} ipython3
@@ -1113,14 +1117,14 @@ a
 ```{code-cell} ipython3
 :hide-output: false
 
-b = a
+b = a # "It means that we pass around only pointers to data, rather than making copies."
 b[0] = 0.0
 a
 ```
 
-What has happened is that we have changed `a` by changing `b`.
+*What has happened is that we have changed `a` by changing `b`.*
 
-The name `b` is bound to `a` and becomes just another reference to the
+The name `b` is bound to `a` and becomes just *another reference* to the
 array (the Python assignment model is described in more detail [later in the course](https://python-programming.quantecon.org/python_advanced_features.html)).
 
 Hence, it has equal rights to make changes to that array.
@@ -1200,6 +1204,7 @@ n = len(z)
 y = np.empty(n)
 for i in range(n):
     y[i] = np.sin(z[i])
+y
 ```
 
 Because they act element-wise on arrays, these functions are called *vectorised functions*.
@@ -1229,6 +1234,8 @@ For example, passing the function `f` defined below a NumPy array causes a `Valu
 
 def f(x):
     return 1 if x > 0 else 0
+
+f(z)
 ```
 
 The NumPy function `np.where` provides a vectorised alternative:
@@ -1316,6 +1323,10 @@ b
 :hide-output: false
 
 z[b]
+```
+
+```{code-cell} ipython3
+
 ```
 
 Of course we can—and frequently do—perform this in one step
@@ -1594,12 +1605,12 @@ Suppose that `q` represents a [probability mass function](https://en.wikipedia.o
 
 We wish to generate a discrete random variable $ x $ such that $ \mathbb P\{x = i\} = q_i $.
 
-In other words, `x` takes values in `range(len(q))` and `x = i` with probability `q[i]`.
+In other words, `x` takes values in `range(len(q))` (This is a bit confusing - the length of values `x` can take is the same length of `q`?) and `x = i` with probability `q[i]`.
 
 The standard (inverse transform) algorithm is as follows:
 
-- Divide the unit interval $ [0, 1] $ into $ n $ subintervals $ I_0, I_1, \ldots, I_{n-1} $ such that the length of $ I_i $ is $ q_i $.  
-- Draw a uniform random variable $ U $ on $ [0, 1] $ and return the $ i $ such that $ U \in I_i $.  
+- Divide the unit interval $ [0, 1] $ into $ n $ subintervals $ I_0, I_1, \ldots, I_{n-1} $ such that the length of $ I_i $ is $ q_i $.
+- Draw a uniform random variable $ U $ on $ [0, 1] $ and return the $ i $ such that $ U \in I_i $.
 
 
 The probability of drawing $ i $ is the length of $ I_i $, which is equal to $ q_i $.
@@ -1620,7 +1631,7 @@ def sample(q):
         a = a + q[i]
 ```
 
-If you can’t see how this works, try thinking through the flow for a simple example, such as `q = [0.25, 0.75]`
+If you cannot see how this works, try thinking through the flow for a simple example, such as `q = [0.25, 0.75]`
 It helps to sketch the intervals on paper.
 
 Your exercise is to speed it up using NumPy, avoiding explicit loops
@@ -1629,13 +1640,15 @@ Use `np.searchsorted` and `np.cumsum`
 
 If you can, implement the functionality as a class called `DiscreteRV`, where
 
-- the data for an instance of the class is the vector of probabilities `q`  
-- the class has a `draw()` method, which returns one draw according to the algorithm described above  
+- the data for an instance of the class is the vector of probabilities `q`
+- the class has a `draw()` method, which returns one draw according to the algorithm described above
 
 
 If you can, write the method so that `draw(k)` returns `k` draws from `q`.
 
-+++
+```{code-cell} ipython3
+np.random.randn(1)
+```
 
 ## Solution to[ Exercise 11.2](https://python-programming.quantecon.org/#np_ex2)
 
