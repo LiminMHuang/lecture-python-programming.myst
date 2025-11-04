@@ -1362,6 +1362,10 @@ np.linalg.det(A)           # Compute the determinant
 ```
 
 ```{code-cell} ipython3
+0.1 + 0.2 # Floating Point Limitation
+```
+
+```{code-cell} ipython3
 :hide-output: false
 
 np.linalg.inv(A)           # Compute the inverse
@@ -1516,6 +1520,8 @@ for x in grid:
         z = f(x, y)
         if z > m:
             m = z
+
+m
 ```
 
 And here is a vectorised version
@@ -1526,7 +1532,7 @@ And here is a vectorised version
 %%time
 
 x, y = np.meshgrid(grid, grid)
-np.max(f(x, y))
+np.max(f(x, y)) == m
 ```
 
 In the vectorised version, all the looping takes place in compiled code.
@@ -1569,18 +1575,10 @@ This code does the job
 def p(x, coef):
     X = np.ones_like(coef) # creates an array of ones with the same shape as coef
     X[1:] = x # replaces everything except the first element
-    y = np.cumprod(X)   # y = [1, x, x**2,...], compute cumulative product, np.cumprod needs an array of values as input. This is why X is created.
-    return coef @ y
-```
-
-```{code-cell} ipython3
-:hide-output: false
-
-def p(x, coef):
-    X = np.ones_like(coef) # creates an array of ones with the same shape as `coef`
-    X[1:] = x
-    y = np.cumprod(X)   # y = [1, x, x**2,...]
-    return coef @ y
+    y = np.cumprod(X)   # y = [1, x, x**2,...], compute cumulative product.
+                        # np.cumprod needs an array of values as input.
+                        # This is why X is created.
+    return coef @ y # dot product is enough - no need to time and add later.
 ```
 
 Let us test it
@@ -1593,8 +1591,9 @@ coef = np.linspace(2, 4, 3)
 print(coef)
 print(p(x, coef))
 # For comparison
-q = np.poly1d(np.flip(coef))
+q = np.poly1d(np.flip(coef)) # np.flip: np.poly1d expects coefficients in a reverse order.
 print(q(x))
+coef.dtype
 ```
 
 ## Exercise 11.2
@@ -1611,7 +1610,6 @@ The standard (inverse transform) algorithm is as follows:
 
 - Divide the unit interval $ [0, 1] $ into $ n $ subintervals $ I_0, I_1, \ldots, I_{n-1} $ such that the length of $ I_i $ is $ q_i $.
 - Draw a uniform random variable $ U $ on $ [0, 1] $ and return the $ i $ such that $ U \in I_i $.
-
 
 The probability of drawing $ i $ is the length of $ I_i $, which is equal to $ q_i $.
 
@@ -1631,7 +1629,23 @@ def sample(q):
         a = a + q[i]
 ```
 
-If you cannot see how this works, try thinking through the flow for a simple example, such as `q = [0.25, 0.75]`
+The version above does not include the end-point case where `U == 0`
+
+```{code-cell} ipython3
+# Robust version
+from random import uniform
+
+def sample(q):
+    a = 0.0
+    U = uniform(0, 1)
+    for i in range(len(q)):
+        if a <= U < a + q[i]: # handle U == 0.0
+            return i
+        a += q[i]
+    return len(q) - 1  # handle U == 1.0
+```
+
+If you cannot see how this works, try thinking through the flow for a simple example, such as `q = [0.25, 0.75]`.
 It helps to sketch the intervals on paper.
 
 Your exercise is to speed it up using NumPy, avoiding explicit loops
@@ -1643,7 +1657,6 @@ If you can, implement the functionality as a class called `DiscreteRV`, where
 - the data for an instance of the class is the vector of probabilities `q`
 - the class has a `draw()` method, which returns one draw according to the algorithm described above
 
-
 If you can, write the method so that `draw(k)` returns `k` draws from `q`.
 
 ```{code-cell} ipython3
@@ -1652,7 +1665,7 @@ np.random.randn(1)
 
 ## Solution to[ Exercise 11.2](https://python-programming.quantecon.org/#np_ex2)
 
-Here’s our first pass at a solution:
+Here is our first pass at a solution:
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -1682,8 +1695,7 @@ class DiscreteRV:
         return self.Q.searchsorted(uniform(0, 1, size=k))
 ```
 
-The logic is not obvious, but if you take your time and read it slowly,
-you will understand.
+The logic is not obvious, but if you take your time and read it slowly, you will understand.
 
 There is a problem here, however.
 
@@ -1701,8 +1713,7 @@ d.q = (0.5, 0.5)
 The problem is that `Q` does not change accordingly, and `Q` is the
 data used in the `draw` method.
 
-To deal with this, one option is to compute `Q` every time the draw
-method is called.
+To deal with this, one option is to compute `Q` every time the draw method is called.
 
 But this is inefficient relative to computing `Q` once-off.
 
@@ -1721,7 +1732,7 @@ Recall our [earlier discussion](https://python-programming.quantecon.org/python_
 
 Your task is to
 
-1. Make the `__call__` method more efficient using NumPy.  
+1. Make the `__call__` method more efficient using NumPy.
 1. Add a method that plots the ECDF over $ [a, b] $, where $ a $ and $ b $ are method parameters.
 
 +++
@@ -1730,7 +1741,7 @@ Your task is to
 
 An example solution is given below.
 
-In essence, we’ve just taken [this code](https://github.com/QuantEcon/QuantEcon.py/blob/master/quantecon/ecdf.py)
+In essence, we have just taken [this code](https://github.com/QuantEcon/QuantEcon.py/blob/master/quantecon/ecdf.py)
 from QuantEcon and added in a plot method
 
 ```{code-cell} ipython3
@@ -1761,7 +1772,8 @@ class ECDF:
     def __init__(self, observations):
         self.observations = np.asarray(observations)
 
-    def __call__(self, x):
+    def __call__(self, x): # Defining '__call__' allows the object itself to behave like a function.
+                           # '__call__' makes ECDF class callable, mimicking the mathematical function F(x).
         """
         Evaluates the ecdf at x
 
@@ -1776,7 +1788,9 @@ class ECDF:
             Fraction of the sample less than x
 
         """
-        return np.mean(self.observations <= x)
+        return np.mean(self.observations <= x) # The ECDF at x is the fraction of sample points
+                                               # less than or equal to x.
+                                               # 'self.observations <= x' returns a Boolean array.
 
     def plot(self, ax, a=None, b=None):
         """
@@ -1804,12 +1818,15 @@ class ECDF:
         plt.show()
 ```
 
-Here’s an example of usage
+Here is an example of usage
 
 ```{code-cell} ipython3
 :hide-output: false
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots() # plt.subplots() is a convenience function that creates:
+                         # a Figure object — the overall container (canvas) for the whole plot,
+                         # one or more Axes objects — the actual plotting areas inside the figure.
+                         # It can be used to create several subplots on one canvas (figure).
 X = np.random.randn(1000)
 F = ECDF(X)
 F.plot(ax)
@@ -1828,7 +1845,9 @@ In this exercise, try to use `for` loops to replicate the result of the followin
 
 np.random.seed(123)
 x = np.random.randn(4, 4)
+print(x)
 y = np.random.randn(4)
+print(y)
 A = x / y
 ```
 
@@ -1844,7 +1863,7 @@ print(A)
 
 For this part of the exercise you can use the `tic`/`toc` functions from the `quantecon` library to time the execution.
 
-Let’s make sure this library is installed.
+Let us make sure this library is installed.
 
 ```{code-cell} ipython3
 :hide-output: false
