@@ -180,7 +180,7 @@ We mention just a few.
 <a id='index-3'></a>
 It is straightforward to generate multiple plots on the same axes.
 
-Here is an example that randomly generates three normal densities and adds a label with their mean
+Here is an example that randomly generates three normal densities and adds a label with their mean.
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -192,7 +192,7 @@ fig, ax = plt.subplots()
 x = np.linspace(-4, 4, 150)
 for i in range(3):
     m, s = uniform(-1, 1), uniform(1, 2)
-    y = norm.pdf(x, loc=m, scale=s)
+    y = norm.pdf(x, loc=m, scale=s) # location and scale parameters
     current_label = rf'$\mu = {m:.2}$'
     ax.plot(x, y, linewidth=2, alpha=0.6, label=current_label)
 ax.legend()
@@ -205,7 +205,7 @@ plt.show()
 <a id='index-4'></a>
 Sometimes we want multiple subplots in one figure.
 
-Here’s an example that generates 6 histograms
+Here is an example that generates 6 histograms.
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -215,7 +215,7 @@ fig, axes = plt.subplots(num_rows, num_cols, figsize=(10, 12))
 for i in range(num_rows):
     for j in range(num_cols):
         m, s = uniform(-1, 1), uniform(1, 2)
-        x = norm.rvs(loc=m, scale=s, size=100)
+        x = norm.rvs(loc=m, scale=s, size=100000)
         axes[i, j].hist(x, alpha=0.6, bins=20)
         t = rf'$\mu = {m:.2}, \quad \sigma = {s:.2}$'
         axes[i, j].set(title=t, xticks=[-4, 0, 4], yticks=[])
@@ -231,8 +231,8 @@ Matplotlib does a nice job of 3D plots — here is one example
 ```{code-cell} ipython3
 :hide-output: false
 
-from mpl_toolkits.mplot3d.axes3d import Axes3D
-from matplotlib import cm
+from mpl_toolkits.mplot3d.axes3d import Axes3D # This class enables 3D plotting in Matplotlib.
+from matplotlib import cm # Stands for colormap
 
 
 def f(x, y):
@@ -240,30 +240,31 @@ def f(x, y):
 
 xgrid = np.linspace(-3, 3, 50)
 ygrid = xgrid
-x, y = np.meshgrid(xgrid, ygrid)
+x, y = np.meshgrid(xgrid, ygrid) # This converts these 1D arrays into 2D coordinate matrices.
 
 fig = plt.figure(figsize=(10, 6))
-ax = fig.add_subplot(111, projection='3d')
+ax = fig.add_subplot(111, projection='3d') # '111' means “1 row, 1 column, first plot”.
+                                           # This automatically creates an instance of 'Axes3D' under the hood.
 ax.plot_surface(x,
                 y,
                 f(x, y),
-                rstride=2, cstride=2,
+                rstride=1, cstride=1, # row and column stride (controls surface resolution).
                 cmap=cm.jet,
-                alpha=0.7,
-                linewidth=0.25)
+                alpha=0.6,
+                linewidth=0.1)
 ax.set_zlim(-0.5, 1.0)
 plt.show()
 ```
 
-### A Customizing Function
+### A Customising Function
 
-Perhaps you will find a set of customizations that you regularly use.
+Perhaps you will find a set of customisations that you regularly use.
 
 Suppose we usually prefer our axes to go through the origin, and to have a grid.
 
-Here’s a nice example from [Matthew Doty](https://github.com/xcthulhu) of how the object-oriented API can be used to build a custom `subplots` function that implements these changes.
+Here is a nice example from [Matthew Doty](https://github.com/xcthulhu) of how the object-oriented API can be used to build a custom `subplots` function that implements these changes.
 
-Read carefully through the code and see if you can follow what’s going on
+Read carefully through the code and see if you can follow what is going on.
 
 ```{code-cell} ipython3
 :hide-output: false
