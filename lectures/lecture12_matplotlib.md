@@ -131,7 +131,7 @@ plt.show()
 
 We have also used `alpha` to make the line slightly transparent — which makes it look smoother.
 
-The location of the legend can be changed by replacing `ax.legend()` with `ax.legend(loc='upper center')`.
+The location of the legend can be changed by replacing `ax.legend()` with `ax.legend(loc='upper center')`
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -149,6 +149,8 @@ If everything is properly configured, then adding LaTeX is trivial
 
 fig, ax = plt.subplots()
 ax.plot(x, y, 'r-', linewidth=2, label=r'$y=\sin(x)$', alpha=0.6)
+# "r''" means 'raw string literal'
+# It tells Python not to treat backslashes (\) as escape characters.
 ax.legend(loc='upper center')
 plt.show()
 ```
@@ -180,7 +182,7 @@ We mention just a few.
 <a id='index-3'></a>
 It is straightforward to generate multiple plots on the same axes.
 
-Here is an example that randomly generates three normal densities and adds a label with their mean.
+Here is an example that randomly generates three normal densities and adds a label with their mean
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -205,7 +207,7 @@ plt.show()
 <a id='index-4'></a>
 Sometimes we want multiple subplots in one figure.
 
-Here is an example that generates 6 histograms.
+Here is an example that generates 6 histograms
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -264,7 +266,7 @@ Suppose we usually prefer our axes to go through the origin, and to have a grid.
 
 Here is a nice example from [Matthew Doty](https://github.com/xcthulhu) of how the object-oriented API can be used to build a custom `subplots` function that implements these changes.
 
-Read carefully through the code and see if you can follow what is going on.
+Read carefully through the code and see if you can follow what is going on
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -293,8 +295,8 @@ plt.show()
 
 The custom `subplots` function
 
-1. calls the standard `plt.subplots` function internally to generate the `fig, ax` pair,  
-1. makes the desired customizations to `ax`, and  
+1. calls the standard `plt.subplots` function internally to generate the `fig, ax` pair,
+1. makes the desired customisations to `ax`, and
 1. passes the `fig, ax` pair back to the calling code.
 
 +++
@@ -315,7 +317,7 @@ print(plt.style.available)
 
 We can now use the `plt.style.use()` method to set the style sheet.
 
-Let’s write a function that takes the name of a style sheet and draws different plots with the style
+Let us write a function that takes the name of a style sheet and draws different plots with the style
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -353,11 +355,11 @@ def draw_graphs(style='default'):
         axes[3].plot(x, rnormY, linewidth=2, alpha=0.7)
 
     style_name = style.split('-')[0]
-    plt.suptitle(f'Style: {style_name}', fontsize=13)
+    plt.suptitle(f'Style: {style_name}', fontsize=15)
     plt.show()
 ```
 
-Let’s see what some of the styles look like.
+Let us see what some of the styles look like.
 
 First, we draw graphs with the style sheet `seaborn`
 
@@ -367,7 +369,7 @@ First, we draw graphs with the style sheet `seaborn`
 draw_graphs(style='seaborn-v0_8')
 ```
 
-We can use `grayscale` to remove colors in plots
+We can use `grayscale` to remove colours in plots
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -407,11 +409,10 @@ There are many parameters you could set for your style sheets.
 
 Set parameters for your style sheet by:
 
-1. creating your own [`matplotlibrc` file](https://matplotlib.org/stable/users/explain/customizing.html), or  
-1. updating values stored in the dictionary-like variable `plt.rcParams`  
+1. creating your own [`matplotlibrc` file](https://matplotlib.org/stable/users/explain/customizing.html), or
+1. updating values stored in the dictionary-like variable `plt.rcParams`
 
-
-Let’s change the style of our overlaid density lines using the second method
+Let us change the style of our overlaid (覆盖的) density lines using the second method
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -441,7 +442,7 @@ parameters = {
     'axes.grid': True,
     'axes.grid.axis': 'y',
 
-    # Update colors for density lines
+    # Update colours for density lines
     'axes.prop_cycle': cycler('color', 
                             ['dimgray', 'slategrey', 'darkgray'])
 }
@@ -482,10 +483,9 @@ plt.rcParams['figure.figsize'] = (10, 6)
 
 ## Further Reading
 
-- The [Matplotlib gallery](https://matplotlib.org/stable/gallery/index.html) provides many examples.  
-- A nice [Matplotlib tutorial](https://scipy-lectures.org/intro/matplotlib/index.html) by Nicolas Rougier, Mike Muller and Gael Varoquaux.  
-- [mpltools](https://tonysyu.github.io/mpltools/index.html) allows easy
-  switching between plot styles.  
+- The [Matplotlib gallery](https://matplotlib.org/stable/gallery/index.html) provides many examples.
+- A nice [Matplotlib tutorial](https://scipy-lectures.org/intro/matplotlib/index.html) by Nicolas Rougier, Mike Muller and Gael Varoquaux.
+- [mpltools](https://tonysyu.github.io/mpltools/index.html) allows easy switching between plot styles.
 - [Seaborn](https://github.com/mwaskom/seaborn) facilitates common statistics plots in Matplotlib.
 
 +++
@@ -510,11 +510,23 @@ The output should look like this
 
 ![https://python-programming.quantecon.org/_static/lecture_specific/matplotlib/matplotlib_ex1.png](https://python-programming.quantecon.org/_static/lecture_specific/matplotlib/matplotlib_ex1.png)
 
-+++
+```{code-cell} ipython3
+fig, ax = plt.subplots()
+theta = np.linspace(0, 2, 10)
+x = np.linspace(0, 5, 300)
+
+for i in range(len(theta)):
+    y = np.cos(np.pi * theta[i] * x) * np.exp(- x)
+    current_label = rf'$ \theta = {theta[i]:.2} $'
+    ax.plot(x, y, linewidth=2, alpha=0.6, label=current_label)
+
+ax.legend()
+plt.show()
+```
 
 ## Solution to[ Exercise 12.1](https://python-programming.quantecon.org/#mpl_ex1)
 
-Here’s one solution
+Here is one solution
 
 ```{code-cell} ipython3
 :hide-output: false
