@@ -519,8 +519,7 @@ We leave you to investigate the [set of available routines](https://docs.scipy.o
 
 ## Exercises
 
-The first few exercises concern pricing a European call option under the
-assumption of risk neutrality.  The price satisfies
+The first few exercises concern pricing a European call option under the assumption of risk neutrality. The price satisfies
 
 $$
 P = \beta^n \mathbb E \max\{ S_n - K, 0 \}
@@ -528,10 +527,10 @@ $$
 
 where
 
-1. $ \beta $ is a discount factor,  
-1. $ n $ is the expiry date,  
-1. $ K $ is the strike price and  
-1. $ \{S_t\} $ is the price of the underlying asset at each time $ t $.  
+1. $ \beta $ is a discount factor,
+1. $ n $ is the expiry date,
+1. $ K $ is the strike price and
+1. $ \{S_t\} $ is the price of the underlying asset at each time $ t $.
 
 
 For example, if the call option is to buy stock in Amazon at strike price $ K $, the owner has the right (but not the obligation) to buy 1 share in Amazon at price $ K $ after $ n $ days.
@@ -544,7 +543,7 @@ The price is the expectation of the payoff, discounted to current value.
 
 ## Exercise 13.1
 
-Suppose that $ S_n $ has the [log-normal](https://en.wikipedia.org/wiki/Log-normal_distribution) distribution with parameters $ \mu $ and $ \sigma $.  Let $ f $ denote the density of this distribution.  Then
+Suppose that $ S_n $ has the [log-normal](https://en.wikipedia.org/wiki/Log-normal_distribution) distribution with parameters $ \mu $ and $ \sigma $.  Let $ f $ denote the density of this distribution. Then
 
 $$
 P = \beta^n \int_0^\infty \max\{x - K, 0\} f(x) dx
@@ -560,11 +559,101 @@ over the interval $ [0, 400] $ when `μ, σ, β, n, K = 4, 0.25, 0.99, 10, 40`.
 
 From `scipy.stats` you can import `lognorm` and then use `lognorm.pdf(x, σ, scale=np.exp(μ))` to get the density $ f $.
 
-+++
+```{code-cell} ipython3
+from scipy.stats import lognorm
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(0, 400, 1200)
+μ, σ, β, n, K = 4, 0.25, 0.99, 10, 40
+# Using list comprehension
+y = [β**n * max((x_val - K), 0) * lognorm.pdf(x_val, σ, scale=np.exp(μ)) for x_val in x]
+
+fig, ax = plt.subplots()
+ax.plot(x, y)
+plt.show()
+```
+
+An improved version
+
+```{code-cell} ipython3
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import lognorm
+
+x = np.linspace(0, 400, 1200)
+μ, σ, β, n, K = 4, 0.25, 0.99, 10, 40
+
+# Using NumPy vectorisation
+y = β**n * np.maximum(x - K, 0) * lognorm.pdf(x, σ, scale=np.exp(μ))
+
+fig, ax = plt.subplots()
+# label = '$ g(x) = β**n max{x - K, 0}f(x)$'
+ax.plot(x, y, linewidth=2, alpha = 0.6)
+ax.set_xlabel('$x$')
+ax.set_ylabel('$g(x)$')
+# ax.legend()
+title = r'$ g(x) = \beta^n \max\{x - K, 0\} f(x)$'
+ax.set_title(rf'Plot of the integrand {title}')
+
+plt.show()
+```
+
+From ChatGPT
+
+```{code-cell} ipython3
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import lognorm
+
+# Parameters
+μ, σ, β, n, K = 4, 0.25, 0.99, 10, 40
+
+# x grid
+x = np.linspace(0, 400, 1200)
+
+# Function definition
+y = β**n * np.maximum(x - K, 0) * lognorm.pdf(x, σ, scale=np.exp(μ))
+
+# Plot
+fig, ax = plt.subplots(figsize=(8, 5))
+
+# Legend text: three lines (formula, f(x) definition, parameters)
+label = (
+    r'$g(x) = \beta^n \max\{x - K, 0\} f(x)$' '\n'
+    r'$f(x) = \dfrac{1}{x\sigma\sqrt{2\pi}}'
+    r'\exp\!\left(-\dfrac{(\ln x - \mu)^2}{2\sigma^2}\right)$' '\n'
+    r'$\mu=4,\ \sigma=0.25,\ \beta=0.99,\ n=10,\ K=40$'
+)
+
+# Plot line
+ax.plot(x, y, linewidth=2, alpha=0.7, color='navy', label=label)
+
+# Labels and title
+ax.set_xlabel(r'$x$', fontsize=12)
+ax.set_ylabel(r'$g(x)$', fontsize=12)
+ax.set_title(r'Plot of the integrand $g(x)$', fontsize=14, pad=10)
+
+# Legend styling
+ax.legend(
+    loc='upper right',
+    fontsize=9.5,
+    frameon=True,
+    framealpha=0.9,
+    fancybox=True,
+    borderpad=1.1,
+    handlelength=2.5
+)
+
+# Minor layout and visual polish
+ax.grid(alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
 
 ## Solution to[ Exercise 13.1](https://python-programming.quantecon.org/#sp_ex01)
 
-Here’s one possible solution
+Here is one possible solution
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -597,17 +686,15 @@ In order to get the option price, compute the integral of this function numerica
 ```{code-cell} ipython3
 :hide-output: false
 
-P, error = quad(g, 0, 1_000)
-print(f"The numerical integration based option price is {P:.3f}")
+price, error = quad(g, 0, np.inf)  # integrate from 0 to infinity
+print(f"Option price ≈ {price:.4f}, estimated error ≈ {error:.2e}")
 ```
 
 ## Exercise 13.3
 
 Try to get a similar result using Monte Carlo to compute the expectation term in the option price, rather than `quad`.
 
-In particular, use the fact that if $ S_n^1, \ldots, S_n^M $ are independent
-draws from the lognormal distribution specified above, then, by the law of
-large numbers,
+In particular, use the fact that if $ S_n^1, \ldots, S_n^M $ are independent draws from the lognormal distribution specified above, then, by the law of large numbers,
 
 $$
 \mathbb E \max\{ S_n - K, 0 \} 
@@ -617,7 +704,14 @@ $$
 
 Set `M = 10_000_000`
 
-+++
+```{code-cell} ipython3
+from scipy.stats import lognorm
+
+M = 10_000_000
+draws = lognorm.rvs(σ, scale=np.exp(μ), size=M)
+P = β**n * np.mean(np.maximum(draws - K, 0))
+print(f'The price from Monte Carlo estimation is {P: .3f}.')
+```
 
 ## Solution to[ Exercise 13.3](https://python-programming.quantecon.org/#sp_ex03)
 
@@ -645,7 +739,7 @@ Test it on the function [(13.2)](#equation-root-f).
 
 ## Solution to[ Exercise 13.4](https://python-programming.quantecon.org/#sp_ex1)
 
-Here’s a reasonable solution:
+Here is a reasonable solution:
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -662,7 +756,7 @@ def bisect(f, a, b, tol=10e-5):
         middle = 0.5 * (upper + lower)
         print(f'Current mid point = {middle}')
         if f(middle) > 0:   # Implies root is between lower and middle
-            return bisect(f, lower, middle)
+            return bisect(f, lower, middle) # This is recursive because it calls a function within the function itself.
         else:               # Implies root is between middle and upper
             return bisect(f, middle, upper)
 ```
