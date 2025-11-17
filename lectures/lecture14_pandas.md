@@ -750,7 +750,7 @@ import datetime as dt
 import yfinance as yf
 ```
 
-Write a program to calculate the percentage price change over 2021 for the following shares:
+Write a programme to calculate the percentage price change over 2021 for the following shares:
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -768,7 +768,7 @@ ticker_list = {'INTC': 'Intel',
                'GOOG': 'Google'}
 ```
 
-Here’s the first part of the program
+Here is the first part of the programme
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -795,9 +795,10 @@ def read_data(ticker_list,
     return ticker
 
 ticker = read_data(ticker_list)
+ticker
 ```
 
-Complete the program to plot the result as a bar graph like this one:
+Complete the programme to plot the result as a bar graph like this one:
 
 ![https://python-programming.quantecon.org/_static/lecture_specific/pandas/pandas_share_prices.png](https://python-programming.quantecon.org/_static/lecture_specific/pandas/pandas_share_prices.png)
 
@@ -851,7 +852,7 @@ plt.show()
 
 ## Exercise 14.2
 
-Using the method `read_data` introduced in Exercise 14.1, write a program to obtain year-on-year percentage change for the following indices:
+Using the method `read_data` introduced in Exercise 14.1, write a programme to obtain year-on-year percentage change for the following indices:
 
 ```{code-cell} ipython3
 :hide-output: false
@@ -885,14 +886,18 @@ indices_data = read_data(
 Then, extract the first and last set of prices per year as DataFrames and calculate the yearly returns such as:
 
 ```{code-cell} ipython3
+# indices_data.groupby(indices_data.index.year)['^GSPC'].first()
+```
+
+```{code-cell} ipython3
 :hide-output: false
 
 yearly_returns = pd.DataFrame()
 
 for index, name in indices_list.items():
-    p1 = indices_data.groupby(indices_data.index.year)[index].first()  # Get the first set of returns as a DataFrame
-    p2 = indices_data.groupby(indices_data.index.year)[index].last()   # Get the last set of returns as a DataFrame
-    returns = (p2 - p1) / p1
+    p1 = indices_data.groupby(indices_data.index.year)[index].first()  # Get the first set of returns as a DataFrame (the price of the first trading day in each year)
+    p2 = indices_data.groupby(indices_data.index.year)[index].last()   # Get the last set of returns as a DataFrame (the price of the last trading day in each year).
+    returns = (p2 - p1) / p1                                           # This is yearly return  return for each year.
     yearly_returns[name] = returns
 
 yearly_returns
@@ -920,6 +925,11 @@ for iter_, ax in enumerate(axes.flatten()):            # Flatten 2-D array to 1-
     ax.set_title(index_name)
 
 plt.tight_layout()
+```
+
+```{code-cell} ipython3
+fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+axes
 ```
 
 <p><a id=mung href=#mung-link><strong>[1]</strong></a> Wikipedia defines munging as cleaning data from one raw form into a structured, purged one.
